@@ -1,0 +1,23 @@
+﻿<Properties StartupConfiguration="{A32B4F7F-478F-1CD1-6CE2-3002E97B5543}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/FileFinderManager.cs">
+    <Files>
+      <File FileName="Assets/ImageConverter.cs" Line="93" Column="5" />
+      <File FileName="Assets/TilemapConverter.cs" Line="124" Column="3" />
+      <File FileName="Assets/SlapNgo.cs" Line="22" Column="4" />
+      <File FileName="Assets/ProjectFinderManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/CutManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/SelectorRect.cs" Line="1" Column="1" />
+      <File FileName="Assets/TileManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/TimemapManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/MenuManager.cs" Line="63" Column="39" />
+      <File FileName="Assets/FileFinderManager.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.GamebuinoTool PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

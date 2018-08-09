@@ -1,0 +1,32 @@
+dist: trusty
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - pkg-config
+      - libglib2.0-dev
+      - libcairo2-dev
+      - libtiff4-dev
+      - libexif-dev
+      - libgif-dev
+      - libjpeg-dev
+      - libunwind8
+
+before_install:
+  - wget -nv -nc https://download.microsoft.com/download/0/6/5/0656B047-5F2F-4281-A851-F30776F8616D/dotnet-dev-linux-x64.2.0.0-preview1-005977.tar.gz -O dotnet-dev-linux-x64.2.0.0-preview1-005977.tar.gz
+  - mkdir dotnet
+  - tar -C dotnet -k -xvzf dotnet-dev-linux-x64.2.0.0-preview1-005977.tar.gz
+
+install:
+  - ./clone-mono.sh
+  - ./clone-gdiplus.sh
+
+script:
+  - cd libgdiplus
+  - ./autogen.sh
+  - make
+  - cd ..
+  - dotnet/dotnet restore System.Drawing.sln
+  - dotnet/dotnet build System.Drawing.sln
+  - MALLOC_CHECK_=1 LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/libgdiplus/src/.libs/ dotnet/dotnet test --filter "TestCategory != 'NotWorking' && FullyQualifiedName != 'MonoTests.System.Drawing.FontTest.Dispose_ToLogFont_LoopCharSet' && FullyQualifiedName != 'MonoTests.System.Drawing.FontTest.ToLogFont_AssertUnmanagedCode' && FullyQualifiedName != 'MonoTests.System.Drawing.FontTest.ToLogFont_DenyUnmanagedCode' && FullyQualifiedName!= 'MonoTests.System.Drawing.GraphicsTest.FromHwnd_Zero'" test/CoreCompat.System.Drawing.Tests/CoreCompat.System.Drawing.Tests.csproj 

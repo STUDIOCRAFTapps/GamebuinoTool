@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MonoDir>$(MSBuildThisFileDirectory)..\..\mono\</MonoDir>
+    <SystemDrawingDir>$(MonoDir)mcs\class\System.Drawing\</SystemDrawingDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;0618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170502-03" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(SystemDrawingDir)/Test/System.Drawing/*.cs">
+      <Link>Test/System.Drawing/%(FileName)%(Extension)</Link>
+    </Compile>
+    <Compile Include="$(SystemDrawingDir)/Test/HostIgnoreList.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestColor.cs" />
+    <Compile Include="$(SystemDrawingDir)/Test/System.Drawing.Imaging/*.cs">
+      <Link>Test/System.Drawing.Imaging/%(FileName)%(Extension)</Link>
+    </Compile>
+    <Compile Include="$(SystemDrawingDir)/Test/System.Drawing.Drawing2D/*.cs">
+      <Link>Test/System.Drawing.Drawing2D/%(FileName)%(Extension)</Link>
+    </Compile>
+    <Compile Include="$(SystemDrawingDir)/Test/System.Drawing.Text/*.cs">
+      <Link>Test/System.Drawing.Text/%(FileName)%(Extension)</Link>
+    </Compile>
+    <Compile Remove="$(SystemDrawingDir)/Test/**/*Cas.cs" />
+
+    <None Include="$(SystemDrawingDir)/Test/System.Drawing/bitmaps/*.*">
+      <Link>Test/System.Drawing/bitmaps/%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CoreCompat.System.Drawing\CoreCompat.System.Drawing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net462'">
+    <!-- These classes are not supported on netstandard -->
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestSystemBrushes.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestSystemPens.cs" />
+
+    <!-- These classes ship with NETStandard.Library -->
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/ColorTranslator.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestSizeFConverter.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestSizeConverter.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestRectangleFConverter.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestRectangleConverter.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestPointConverter.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/TestPoint.cs" />
+    <Compile Remove="$(SystemDrawingDir)/Test/System.Drawing/ColorConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+  <Target Name="CheckMonoSources" BeforeTargets="BeforeBuild">
+    <Error Condition="!Exists('$(SystemDrawingDir)')" Text="Could not find Mono's System.Drawing at '$(SystemDrawingDir)'. Did you clone the Mono repository using clone-mono.ps1?" />
+  </Target>
+</Project>
